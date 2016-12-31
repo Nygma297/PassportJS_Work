@@ -54,8 +54,7 @@ app.use(expressValidator({
 
 //Register Module
 app.get('/reg', function(req, res){
-	res.sendFile(__dirname + '/' + 'register.html');
-	// res.render('register');
+	res.render('register');
 });
 app.get('/register', function(req, res){
     User.createUser(req.query, function(err, user){
@@ -145,8 +144,7 @@ passport.use('local', new LocalStrategy(
 ));
 
 app.get('/in', function(req, res){
-	res.sendFile(__dirname + '/' + 'login.html');
-	// res.render('login');
+	res.render('login');
 });
 
 app.get('/login', passport.authenticate('local', {successRedirect:'/', failureRedirect:'/in'}),
