@@ -1,0 +1,26 @@
+<p class="para">Asked for your data? Well here it is!</p>
+    {{#each temp}}
+    <p>Contact Name = {{this.name}},</p>
+    <p> Contact Email = {{this.email}} </p>
+    <p>Contact Mobile = {{this.mobile}} </p><br/>
+    {{/each}}
+<h2>Phew That's all your data!</h2>
+
+<form action="/data" method="POST" >
+					<div class="left">
+						<div class="name">
+							<i class="fa fa-user" aria-hidden="true"></i>
+							<input type="text" name="name" class="name" placeholder="Contact Name" required="">
+						</div>
+						<div class="email">
+							<i class="fa fa-envelope" aria-hidden="true"></i>
+							<input type="text" name="email" class="email" placeholder="Contact's Email" required="">
+						</div>
+						<div class="phone">
+							<i class="fa fa-phone" aria-hidden="true"></i>
+							<input type="text" name="mobile" class="phone" placeholder="Contact's Cell Number" required="">
+						</div>
+						<input type="submit" value="Store">
+					</div>
+	</form>
+			
