@@ -9,8 +9,8 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-var User = require('./user');
-var Contact =  require('./model')
+var User = require('./models/user');
+var Contact =  require('./models/model')
 var app = exp();
 var path = require('path');
 app.set('views', path.join(__dirname, 'views'));
@@ -155,7 +155,7 @@ app.get('/login', passport.authenticate('local', {successRedirect:'/', failureRe
 
 // Logout Module
 
-app.get('/logout', function(req, res){
+app.get('/out', function(req, res){
 	req.logout();
 
 	// req.flash('success_msg', 'You Logged Out! Wanna Go again?');
@@ -189,7 +189,7 @@ app.get('/contacts2', function(req, res) {
         if(err){
             return console.error(err);
         }else{
-            Conatct.remove(function(err){
+            Contact.remove(function(err){
             if(err){
                 return console.error(err);
             }})
@@ -210,7 +210,7 @@ app.post('/data', function(req, res) {
 
     var newEntry = new Contact();
 
-    newEntry.userid = req.user.id;
+    var w = newEntry.userid = req.user.id;
     var x = newEntry.name = req.body.name;
     var y = newEntry.email = req.body.email;
     var z = newEntry.mobile = req.body.mobile;
@@ -222,11 +222,9 @@ app.post('/data', function(req, res) {
             console.log(data);
         }
         var data = {
-            name: x, email: y, mobile: z
+            _id: w, name: x, email: y, mobile: z
         };
-        setTimeout(function(err,data){
-            res.render('x', data);
-        },5000);
+            res.redirect('/');
     });
 })
 
@@ -243,7 +241,7 @@ app.post('/data2', function(req, res) {
 });
 //*/
 
-app.put('/up', function(req, res){
+app.get('/up', function(req, res){
 	Contact.findOneAndUpdate({name: req.params.name}, {$set:{name:req.body.n_name, email: req.body.email, mobile: req.body.mobile}}, {upsert:false}, function(err, data){
 		if(err){
 			console.log('Error Encountered!');
@@ -255,14 +253,14 @@ app.put('/up', function(req, res){
 	})
 }) 
 
-app.delete('/del', function(req, res) {
-    var x = req.query.name;
+app.get('/del', function(req, res) {
+    var x = req.query.id;
     console.log(x);
-    Contact.findOneAndRemove({x}, function(err, data) {
+    Contact.findOneAndRemove({'_id':x}, function(err, data) {
         if(err) {
             res.send('error removing')
         } else {
-            res.render('z', {name:x});
+            res.redirect('/');
         }});
     });
 //*/
