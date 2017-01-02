@@ -1,12 +1,40 @@
-<p class="para">Asked for your data? Well here it is!</p>
-    {{#each temp}}
-    <p>Contact Name = {{this.name}},</p>
-    <p> Contact Email = {{this.email}} </p>
-    <p>Contact Mobile = {{this.mobile}} </p><br/>
-    {{/each}}
-<h2>Phew That's all your data!</h2>
+	    <nav class="navbar navbar-default">
+    	    <div class="container-fluid">
+        	    <div class="navbar-header">
+            	    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1">
+                	    <span class="sr-only">Toggle navigation</span>
+    	            </button>
+					<a href="#"><img src="images/pb2.png"  width="15%" /></a></div>
+        	    <div class="collapse navbar-collapse" id="navcol-1">
+            	    <ul class="nav navbar-nav">
+                	    <li class="active" role="presentation"><a href="#">Dashboard</a></li>
+                    	<li role="presentation"><a href="/out">Logout</a></li>
+    	            </ul>
+        	    </div>
+        	</div>
+    	</nav>
+		<div class="container">
+			<h1>Contact Book</h1>
+			<div class="contact">
 
-<form action="/data" method="POST" >
+				<div class="right-w3">
+					<p class="para">Hey Look! All your contacts!</p>
+    				{{#each temp}}
+    				<p>Contact Name = {{this.name}}</p>
+				    <p> {{this.name}}'s Email = {{this.email}} </p>
+    				<p>{{this.name}}'s Cell number = {{this.mobile}} </p>
+					<form action="/del" method="get">
+						<input type="hidden" name="id" value={{this._id}}>
+						<input type = "submit" value="Delete">
+					</form><br/>
+					{{!--<form action="/up" method="get">
+						<input type="hidden" name="id" value={{this._id}}>
+						<input type = "submit" value="Update">
+					</form><br/>--}}
+    				{{/each}}
+					<h2>Phew! That's all your data!</h2>
+				</div>
+				<form action="/data" method="POST" >
 					<div class="left">
 						<div class="name">
 							<i class="fa fa-user" aria-hidden="true"></i>
@@ -22,5 +50,15 @@
 						</div>
 						<input type="submit" value="Store">
 					</div>
-	</form>
-			
+				</form>
+				<div class="clear"></div>
+				<div class="clear"></div>
+				{{!--<div class="right-w3">
+					<h2>Everybody needs Options here are some of yours!</h2>
+					<button type = "button" onclick="window.location='http://localhost:8081/contacts'">View Data</button>
+					<br/><button type = "button" onclick="window.location='delete.html'">Remove a contact</button>
+					<br/><button type = "button" onclick="window.location='update.html'">Update a contact</button>
+				</div>--}}
+
+				<div class="clear"></div>
+			</div>			
