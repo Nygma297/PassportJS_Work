@@ -65,6 +65,15 @@ input[type="text"]{
 	width:70%;
 	color:#fff;
 }
+input[type="password"]{
+	padding:10px;
+	background:transparent;
+	border:none;
+	border-bottom:1px solid #fff;
+	outline:none;
+	width:70%;
+	color:#fff;
+}
 input[type="submit"] {
     padding: 13px 80px;
     background: #a07650;
@@ -79,7 +88,8 @@ input[type="submit"] {
 	-ms-transition: 0.5s all;
 	cursor:pointer;
 	font-family: 'open sans',sans-serif;
-}button[type="button"] {
+}
+button[type="button"] {
     padding: 13px 80px;
     background: #a07650;
     border: none;
