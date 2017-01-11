@@ -3,7 +3,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var exphbs = require('express-handlebars');
 var expressValidator = require('express-validator');
-// var flash = require('connect-flash');
 var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
@@ -16,7 +15,8 @@ var path = require('path');
 app.set('views', path.join(__dirname, 'views'));
 app.engine('handlebars', exphbs({defaultLayout: 'main'})); 
 app.set('view engine', 'handlebars');
-
+//importing functions
+import{getUserById, getUserByUsername, comparePassword, createUser} from 'models/user';
 mongoose.connect('mongodb://localhost/cbdb');
 
 app.use(bodyParser.json());
@@ -36,7 +36,7 @@ app.use('/',(req,rea,cb)=>{
     cb();
 });
 app.use(expressValidator({
-    errorFormatter: function(param, msg, value) {
+    errorFormatter: (param, msg, value)=> {
         var namespace = param.split('.')
         , root    = namespace.shift()
         , formParam = root;
@@ -53,31 +53,22 @@ app.use(expressValidator({
 }));
 
 //Register Module
-app.get('/reg', function(req, res){
+app.get('/reg', (req, res)=>{
 	res.render('register');
 });
-app.get('/register', function(req, res){
-    User.createUser(req.query, function(err, user){
+app.get('/register', (req, res)=> {
+    User.createUser(req.query, (err, user)=> {
 		if(err) throw err;
 		console.log(user);
 	});
 	res.redirect('/in');
-    //  newUser.save(function(err, data) {
-    //      if(err) {
-    //          res.send('error saving data');
-    //      } else {
-    //          console.log(data);
-    //      }         
-    // });		
-    // req.flash('success_msg', 'Registered? Go on log-in!');
-//*/
  });
 
 
-app.get('/', ensureAuthenticated, function(req, res){
+app.get('/', ensureAuthenticated, (req, res) => {
         console.log('getting all contacts ');
     var temp = Contact.find({userid: req.user.id})
-    .exec(function(err, contacts) {
+    .exec((err, contacts) => {
         if(err) {
             res.send('error occured')
         } else {
@@ -91,7 +82,6 @@ function ensureAuthenticated(req, res, next){
 	if(req.isAuthenticated()){
 		return next();
 	} else {
-		// req.flash('error_msg','Welcome! lets get you in!');
 		res.redirect('/in');
 	}
 }
@@ -99,15 +89,15 @@ function ensureAuthenticated(req, res, next){
 
 //login module
 
-passport.serializeUser(function(data, done) {
+passport.serializeUser((data, done)=> {
     console.log('Serializing', data);
     data._id
     done(null, data._id);
 });
 
-passport.deserializeUser(function(id, done) {
+passport.deserializeUser((id, done)=> {
     console.log('De-serializing');
-    User.getUserById(id, function(err, user) {
+    User.getUserById(id, (err, user)=> {
         console.log('getting by idd');
         done(err, user);
     });
@@ -115,21 +105,20 @@ passport.deserializeUser(function(id, done) {
 
 
 passport.use('local', new LocalStrategy(
-    function(username, password, done) {
+    (username, password, done)=> {
        var email=username;
        var pass=password;
         console.log("into LocalStrategy ", password);
-        User.getUserByUsername(email, function(err, data){
+        User.getUserByUsername(email, (err, data)=>{
             console.log('Into callback',err,data);
             var x = data;
-            // User.findOne({"email":email}, function(err, data){
    	        if(err) throw err;
             if(!data){
                 console.log("invalid password");
                 return done(null, false, {message: 'ID not registered Please register!'});
    	        }
 
-               User.comparePassword(pass, data['pass'], function(err, data){
+               User.comparePassword(pass, data['pass'], (err, data)=>{
    	            if(err) throw err;
                 if(data){
                     console.log(x);
@@ -143,59 +132,41 @@ passport.use('local', new LocalStrategy(
     }   
 ));
 
-app.get('/in', function(req, res){
+app.get('/in', (req, res)=>{
 	res.render('login');
 });
 
 app.get('/login', passport.authenticate('local', {successRedirect:'/', failureRedirect:'/in'}),
-  function(req, res) {
+  (req, res)=> {
     res.redirect('/');
   });
 // Module end
 
 // Logout Module
 
-app.get('/out', function(req, res){
+app.get('/out', (req, res)=>{
 	req.logout();
-
-	// req.flash('success_msg', 'You Logged Out! Wanna Go again?');
-
 	res.redirect('/in');
 });
 // Module end
 
-// module.exports = app;
-// app.use(flash());
-
-/*app.use(function (req, res, next) {
-  res.locals.success_msg = req.flash('Success!');
-  res.locals.error_msg = req.flash('Errror Occured!');
-  res.locals.error = req.flash('Error Encountered');
-  res.locals.user = req.user || null;
-  next();
-});
-//*/
-// app.get('/index.html', function(req, res){
-	// res.sendFile(__dirname + '/' + 'index.html');
-// });
-
-app.get('/', function(req, res) {
+app.get('/', (req, res)=>{
 
 });
 
-app.get('/contacts2', function(req, res) {
+app.get('/contacts2', (req, res)=> {
     console.log('Removing the specified contact!');
-    Contact.findOne({ name: req.body.name}, function(err, data){
+    Contact.findOne({ name: req.body.name}, (err, data)=>{
         if(err){
             return console.error(err);
         }else{
-            Contact.remove(function(err){
+            Contact.remove((err)=>{
             if(err){
                 return console.error(err);
             }})
         }
     })
-    .exec(function(err, contacts) {
+    .exec((err, contacts)=> {
         if(err) {
             res.send('error occured')
         } else {
@@ -204,9 +175,8 @@ app.get('/contacts2', function(req, res) {
         }
     });
 });
-//*/
 
-app.post('/data', function(req, res) {
+app.post('/data', (req, res) =>{
 
     var newEntry = new Contact();
 
@@ -215,7 +185,7 @@ app.post('/data', function(req, res) {
     var y = newEntry.email = req.body.email;
     var z = newEntry.mobile = req.body.mobile;
 
-    newEntry.save(function(err, data) {
+    newEntry.save((err, data) =>{
         if(err) {
             res.send('error saving data');
         } else {
@@ -228,21 +198,8 @@ app.post('/data', function(req, res) {
     });
 })
 
-/*
-app.post('/data2', function(req, res) {
-  Book.create(req.body, function(err, book) {
-    if(err) {
-      res.send('error saving book');
-    } else {
-      console.log(book);
-      res.send(book);
-    }
-  }); 
-});
-//*/
-
-app.get('/up', function(req, res){
-	Contact.findOneAndUpdate({name: req.params.name}, {$set:{name:req.body.n_name, email: req.body.email, mobile: req.body.mobile}}, {upsert:false}, function(err, data){
+app.get('/up', (req, res)=>{
+	Contact.findOneAndUpdate({name: req.params.name}, {$set:{name:req.body.n_name, email: req.body.email, mobile: req.body.mobile}}, {upsert:false}, (err, data)=>{
 		if(err){
 			console.log('Error Encountered!');
 		}else{
@@ -253,18 +210,17 @@ app.get('/up', function(req, res){
 	})
 }) 
 
-app.get('/del', function(req, res) {
+app.get('/del', (req, res)=> {
     var x = req.query.id;
     console.log(x);
-    Contact.findOneAndRemove({'_id':x}, function(err, data) {
+    Contact.findOneAndRemove({'_id':x}, (err, data)=> {
         if(err) {
             res.send('error removing')
         } else {
             res.redirect('/');
         }});
     });
-//*/
 
-app.listen(8081, function() {
+app.listen(8081, ()=> {
   console.log('Server running on http://localhost:' + 8081);
 });

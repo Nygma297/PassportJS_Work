@@ -16,8 +16,8 @@ var UserSchema = new Schema({
 
 var User = mongoose.model('User', UserSchema);
 exports.User = User;
-exports.createUser = function(userDetails, callback){
-		bcrypt.hash(userDetails.pwd, salt, function(err, hash) {
+exports.createUser = (userDetails, callback)=> {
+		bcrypt.hash(userDetails.pwd, salt, (err, hash)=> {
 			if(err){
 				return console.error(err);
 			}
@@ -32,23 +32,23 @@ exports.createUser = function(userDetails, callback){
 	});
 }
 //*/
-exports.getUserByUsername = function(email, callback){
+export var getUserByUsername = (email, callback)=> {
 	console.log('Getting user');
 	var query = {email: email};
 	User.findOne(query, callback);
 }
 
-exports.getUserById = function(id, callback){
-	console.log('getting ID');
-	User.findById(id,callback);
+export var getUserById = (id, callback)=> {
+	console.log('Getting ID');
+	User.findById(id, callback);
 }
 
-// exports.comparePassword = function(candidateUser, candidatePass, salt, callback){
-	// User.findOne({"email":candidateUser}, function(err, data){
+// exports.comparePassword = (candidateUser, candidatePass, salt, callback)=>{
+	// User.findOne({"email":candidateUser}, (err, data)=> {
 	// 	var x = data["pass"];
 	// })
 	// console.log(x);
-	// bcrypt.compare(candidatePass, x, function( err, isMatch) {
+	// bcrypt.compare(candidatePass, x, ( err, isMatch)=> {
     // 	if(err) throw err;
 	// 	if(isMatch){
 	// 		callback(null, isMatch);
@@ -56,9 +56,9 @@ exports.getUserById = function(id, callback){
 	// 	}
 	// });
 // }
-exports.comparePassword = function(candidatePass, salt, callback){
+export var comparePassword = (candidatePass, salt, callback)=>{	
 	console.log('comparing pass',candidatePass);
-	bcrypt.compare(candidatePass, salt, function(err, isMatch) {
+	bcrypt.compare(candidatePass, salt, (err, isMatch)=> {
     	if(err) throw err;
 		console.log('Password match is ',isMatch);
     	callback(null, isMatch);
