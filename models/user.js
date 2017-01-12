@@ -21,7 +21,7 @@ exports.createUser = (userDetails, callback)=> {
 			if(err){
 				return console.error(err);
 			}
-			var newUser = new User();
+			let newUser = new User();
 
 			newUser.name = userDetails.name;
 			newUser.email = userDetails.email;
@@ -32,13 +32,13 @@ exports.createUser = (userDetails, callback)=> {
 	});
 }
 //*/
-export var getUserByUsername = (email, callback)=> {
+export function getUserByUsername(email, callback){
 	console.log('Getting user');
 	var query = {email: email};
 	User.findOne(query, callback);
 }
 
-export var getUserById = (id, callback)=> {
+export function getUserById(id, callback){
 	console.log('Getting ID');
 	User.findById(id, callback);
 }
@@ -56,7 +56,7 @@ export var getUserById = (id, callback)=> {
 	// 	}
 	// });
 // }
-export var comparePassword = (candidatePass, salt, callback)=>{	
+export function comparePassword(candidatePass, salt, callback){	
 	console.log('comparing pass',candidatePass);
 	bcrypt.compare(candidatePass, salt, (err, isMatch)=> {
     	if(err) throw err;

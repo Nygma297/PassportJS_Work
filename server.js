@@ -37,7 +37,7 @@ app.use('/',(req,rea,cb)=>{
 });
 app.use(expressValidator({
     errorFormatter: (param, msg, value)=> {
-        var namespace = param.split('.')
+        let namespace = param.split('.')
         , root    = namespace.shift()
         , formParam = root;
 
@@ -106,12 +106,12 @@ passport.deserializeUser((id, done)=> {
 
 passport.use('local', new LocalStrategy(
     (username, password, done)=> {
-       var email=username;
-       var pass=password;
+       let email=username;
+       let pass=password;
         console.log("into LocalStrategy ", password);
         User.getUserByUsername(email, (err, data)=>{
             console.log('Into callback',err,data);
-            var x = data;
+            let x = data;
    	        if(err) throw err;
             if(!data){
                 console.log("invalid password");
@@ -180,10 +180,10 @@ app.post('/data', (req, res) =>{
 
     var newEntry = new Contact();
 
-    var w = newEntry.userid = req.user.id;
-    var x = newEntry.name = req.body.name;
-    var y = newEntry.email = req.body.email;
-    var z = newEntry.mobile = req.body.mobile;
+    let w = newEntry.userid = req.user.id;
+    let x = newEntry.name = req.body.name;
+    let y = newEntry.email = req.body.email;
+    let z = newEntry.mobile = req.body.mobile;
 
     newEntry.save((err, data) =>{
         if(err) {
@@ -211,7 +211,7 @@ app.get('/up', (req, res)=>{
 }) 
 
 app.get('/del', (req, res)=> {
-    var x = req.query.id;
+    let x = req.query.id;
     console.log(x);
     Contact.findOneAndRemove({'_id':x}, (err, data)=> {
         if(err) {
